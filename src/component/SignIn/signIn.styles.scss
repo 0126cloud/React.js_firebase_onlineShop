@@ -1,0 +1,28 @@
+.sign-in {
+    width: 380px;
+    display: flex;
+    flex-direction: column;
+
+    @media only screen and (max-width: 1000px) {
+        width: 100%;
+      }
+    
+
+    .title {
+        margin: 10px 0;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+
+        @media only screen and (max-width: 1000px) {
+            display: grid;
+            grid-template-columns: 1fr 1f;
+            grid-row-gap: 20px;
+            width: 80%;
+        }
+        
+    }
+
+}
