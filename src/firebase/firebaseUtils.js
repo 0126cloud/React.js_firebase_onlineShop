@@ -13,6 +13,22 @@ const config = {
   measurementId: "G-J11HVH6ZSL"
 };
 
+export const getUserCartRef = async userId => {
+  const cartsRef = firestore.collection("carts").where("userId", "==", userId);
+  const snapShot = await cartsRef.get();
+  console.log(snapShot);
+
+  if (snapShot.empty) {
+    const cartDocRef = firestore.collection("carts").doc();
+    await cartDocRef.set({ userId, cartItems: [] });
+
+    return cartDocRef;
+  } else {
+    return snapShot.docs[0].ref;
+  }
+  
+};
+
 
 export const creatCollectionAndDocuments = async (collectionKey, docsToAdd) => {
   const collectionRef = firestore.collection(collectionKey);
@@ -25,45 +41,45 @@ export const creatCollectionAndDocuments = async (collectionKey, docsToAdd) => {
   });
 
   return await batch.commit();
-  
-}
+};
 
 export const convertCollectionsSnapshotToOneObject = collections => {
   const transformedCollections = collections.docs.map(doc => {
-    const {title, items} = doc.data();
+    const { title, items } = doc.data();
 
     return {
       routeName: encodeURI(title.toLowerCase()),
       id: doc.id,
       title,
       items
-    }
-  })
+    };
+  });
 
   return transformedCollections.reduce((currentObject, collection) => {
     currentObject[collection.title.toLowerCase()] = collection;
     return currentObject;
-  } ,{})
-} 
+  }, {});
+};
 
 export const getCurrentUser = () => {
   return new Promise((resolve, reject) => {
     const unsubscribe = auth.onAuthStateChanged(userAuth => {
       unsubscribe();
       resolve(userAuth);
-    }, reject)
-  })
-}
-
+    }, reject);
+  });
+};
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
-  if(!userAuth){return;}
-  
+  if (!userAuth) {
+    return;
+  }
+
   const userRef = firestore.doc(`users/${userAuth.uid}`);
   const snapShot = await userRef.get();
 
-  if(!snapShot.exists){
-    const {displayName, email} = userAuth;
+  if (!snapShot.exists) {
+    const { displayName, email } = userAuth;
     const createdAt = new Date();
 
     try {
@@ -72,17 +88,14 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         email,
         createdAt,
         ...additionalData
-      })
+      });
     } catch (error) {
       console.log("Error creating user!", error.message);
-      
     }
   }
 
   return userRef;
-
-}
-
+};
 
 firebase.initializeApp(config);
 
@@ -94,6 +107,5 @@ googleProvider.setCustomParameters({ prompt: "select_account" });
 export const signInWithGoogle = () => {
   auth.signInWithPopup(googleProvider);
 };
-
 
 export default firebase;

@@ -23,6 +23,7 @@ $main-color: black;
     border-radius: 0;
     border-bottom: 1px solid $sub-color;
     margin: 25px 0;
+    font-family: 'Noto Sans TC', sans-serif;
 
     &:focus {
       outline: none;
@@ -33,9 +34,14 @@ $main-color: black;
     }
   }
 
-  input[type='password'] {
-    letter-spacing: 0.3em;
+  .invalid {
+    outline: none;
+    background-color: #ffcccc;
   }
+
+  // input[type='password'] {
+  //   letter-spacing: 0.3em;
+  // }
 
   .form-input-label {
     color: $sub-color;

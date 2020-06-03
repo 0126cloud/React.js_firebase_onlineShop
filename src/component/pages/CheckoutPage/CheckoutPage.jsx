@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { selectCartItems, selectCartTotalPrice } from "../../../redux/cart/cartSelector";
 import CheckoutItem from "../../CheckoutItem/CheckoutItem";
 import StripeButton from "../../StripeButton/StripeButton";
+import CustomButton from "../../CustomButton/CustomButton"; 
+import { withRouter } from "react-router-dom";
 
 import "./checkout.styles.scss";
 
@@ -35,6 +37,7 @@ const CheckoutPage = props => {
             <div className="total">
                 <span>TOTAL: ${props.totalPrice}</span>
             </div>
+            <CustomButton type="submit" value="Check Out Now" onClick={() => props.history.push("/checkout/checkoutdata")} />
             <div className="test-warning">
                 *Please use the following test credit card for payments.*
                 <br/>
@@ -50,4 +53,4 @@ const mapStateToProps = state => ({
     totalPrice: selectCartTotalPrice(state)
 })
 
-export default connect(mapStateToProps)(CheckoutPage);
+export default withRouter(connect(mapStateToProps)(CheckoutPage));
